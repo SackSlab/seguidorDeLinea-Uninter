@@ -1,4 +1,3 @@
-#include <QTRSensors.h>
 
 
 //Mapeo de pines
@@ -14,6 +13,13 @@
 #define EMITTER_PIN             11  
 #define LED     13     
 
+//Mapeo de pines Modificados
+#define Sensor1 A0
+#define Sensor2 A1
+#define Sensor3 A2
+#define Sensor4 A3
+#define Sensor5 A4
+#define Sensor6 A5
 
 // Constantes para PID
 float KP = 0.01;
@@ -31,10 +37,7 @@ int error4=0;
 int error5=0;
 int error6=0;
 
-// Configuración de la librería QTR-8A         
-QTRSensorsAnalog qtra((unsigned char[]) 
-  {A0, A1, A2, A3, A4, A5}
-, NUM_SENSORS, NUM_SAMPLES_PER_SENSOR, EMITTER_PIN);
+
 
 unsigned int sensorValues[NUM_SENSORS];
 
@@ -102,7 +105,20 @@ void freno(boolean left, boolean righ, int value)
   }
 }
 
+void LecturaSensores(){
+int posicion;
+int valor1,valor2,valor3,valor4,valor5,valor6;
+valor1=analogRead(A0);
+valor2=analogRead(A1);
+valor3=analogRead(A2);
+valor4=analogRead(A3);
+valor5=analogRead(A4);
+valor6=analogRead(A5);
 
+posicion=(((1*valor1)+(2*valor2)+(3*valor3)+(4*valor4)+(5*valor5)+(6*valor6))/(valor1+valor2+valor3+valor4+valor5+valor6));
+return posicion;
+
+}
 
 
 
@@ -150,7 +166,7 @@ int Target = 2500; // Setpoint (Como utilizamos 6 sensores, la línea debe estar
 void loop()
 {   
  
-  position = qtra.readLine(sensorValues, true, true);
+  position = LecturaSensores();
   proporcional = ((int)position) - 2500;
 
 
